@@ -55,28 +55,21 @@ def solve_laplace(mesh, boundary_markers, boundary_values, ldrb_markers):
 
 def request_functions(meshname):
 
-    mesh, ffun, markers = ldrb.gmsh2dolfin(meshname + ".msh")
-
+    #mesh reading converted by dolfin-convert
+    mesh = df.Mesh(meshname + '.xml')
     materials = df.MeshFunction("size_t", mesh, meshname + '_physical_region.xml')
+    ffun = df.MeshFunction("size_t", mesh, meshname + '_facet_region.xml')
 
     V0 = df.FunctionSpace(mesh, "DG", 0) 
     tecido = df.Function(V0) 
     tecido.vector()[:] = materials.array()==2
     tecido.rename("tecido", "tecido")
 
-
-    for m in markers:
-        print(m)
-
-
-    print(markers)
-
-
     ldrb_markers = {
-        "base": markers["base"][0],
-        "lv": markers["ve"][0],
-        "epi": markers["epi"][0],
-        "rv": markers["vd"][0]
+        "base": 10,
+        "lv": 20,
+        "epi": 40,
+        "rv": 30
     }
 
     # Choose space for the fiber fields
@@ -130,7 +123,7 @@ def request_functions(meshname):
     sheet_normal.rename("n_0","n_0")
 
 
-    print("Salvando...")
+    print("Saving...")
 
     with df.XDMFFile(mesh.mpi_comm(), meshname + ".xdmf") as xdmf:
         xdmf.parameters.update(
@@ -147,29 +140,11 @@ def request_functions(meshname):
 
     print("Done.")
 
-    # Store the results
-    #with df.HDF5File(mesh.mpi_comm(), "biv.h5", "w") as h5file:
-    #    h5file.write(fiber, "/fiber")
-    #    h5file.write(sheet, "/sheet")
-    #    h5file.write(sheet_normal, "/sheet_normal")
-
-
-    # You can also store files in XDMF which will also compute the fiber angle as scalars on the glyph to be visualised in Paraview. Note that these functions don't work (yet) using mpirun
-
-    # (These function are not tested in parallel)
-    #ldrb.fiber_to_xdmf(fiber, "biv_fiber_new1")
-    #ldrb.fiber_to_xdmf(sheet, "biv_sheet")
-    #ldrb.fiber_to_xdmf(sheet_normal, "biv_sheet_normal")
-
-    # ![_](_static/figures/biv_fiber.png)
-    # [Link to source code](https://github.com/finsberg/ldrb/blob/main/demos/demo_biv.py)
-
-
-
 
 def convert_xdmf_to_vtu(meshname):
-    filename = meshname+".xdmf"
 
+    print("Converting .xdmf to .vtu")
+    filename = meshname+".xdmf"
     t, point_data, cell_data = None, None, None
 
     #FAZER ALTERAÇÃO DE TEMPO PARA O 3D
@@ -179,4 +154,3 @@ def convert_xdmf_to_vtu(meshname):
 
     mesh = meshio.Mesh(points, cells, point_data=point_data, cell_data=cell_data,)
     mesh.write(meshname+".vtu", file_format="vtu",  )
-        

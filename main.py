@@ -1,11 +1,25 @@
 import argparse
-from generate_fiber_3D_biv.py import *
-
+import meshio
 import os
-parser = argparse.ArgumentParser()
-parser.add_argument('-m', type=str, default='mesh.msh', help='File with hearth meshs')
+from generate_fiber_3D_biv import request_functions
 
-args = parser.parse_args()
-meshname = args.m
+def convert_msh_to_xml(meshname):
+    # Command to run dolfin-convert and convert the .msh mesh to .xml
+    command = f"dolfin-convert {meshname}.msh {meshname}.xml"
+    os.system(command)
+    
+    print(f"Mesh {meshname}.msh successfully converted to {meshname}.xml.")
 
-request_functions(meshname)
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-m', type=str, default='mesh.msh', help='File with heart meshes')
+    args = parser.parse_args()
+    meshname = args.m
+
+    convert_msh_to_xml(meshname)
+    request_functions(meshname)
+
+
+if __name__ == "__main__":
+    main()
