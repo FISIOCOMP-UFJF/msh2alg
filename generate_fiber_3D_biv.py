@@ -1,6 +1,7 @@
 import dolfin as df
 import ldrb
 import argparse
+import meshio
 
 def get_physical_region(fname):
     #generate physical groups to xdmf
@@ -138,18 +139,22 @@ def request_functions(meshname):
         xdmf.write(tecido, 0)
         xdmf.write(u, 0)
 
+
+    convert_xdmf_to_vtu(meshname)
+
     print("Done.")
 
 
+#PROBLEMA GERACAO .VTU. NÃO COMPATÍVEL COM LEITURA DO HEXA MESH FROM VTK
 def convert_xdmf_to_vtu(meshname):
 
     print("Converting .xdmf to .vtu")
     filename = meshname+".xdmf"
     t, point_data, cell_data = None, None, None
 
-    #FAZER ALTERAÇÃO DE TEMPO PARA O 3D
     with meshio.xdmf.TimeSeriesReader(filename) as reader:
         points, cells = reader.read_points_cells()
+        #for k in range(reader.num_steps):
         t, point_data, cell_data = reader.read_data(0)
 
     mesh = meshio.Mesh(points, cells, point_data=point_data, cell_data=cell_data,)

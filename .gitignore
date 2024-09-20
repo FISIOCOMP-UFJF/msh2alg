@@ -3,3 +3,6 @@ __pycache__
 *.xdmf
 *.msh
 *.h5
+*.vtu
+*.alg
+hexa-mesh-from-VTK
