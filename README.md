@@ -1,8 +1,9 @@
 # msh2alg
 
 ## Pre-Requisites
-- FEniCS 2019.1.0
+- FEniCS 2019.1.0.
 - Gmsh
+- LDRB (conda)
 - meshio
 - h5py 
 - Scipy
