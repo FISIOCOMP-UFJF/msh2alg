@@ -1,29 +1,6 @@
 import dolfin as df
 import ldrb
-import argparse
 import meshio
-
-def get_physical_region(fname):
-    #generate physical groups to xdmf
-    import pathlib as pl
-    tetra_mesh_name = pl.Path(f"mesh_{fname}.xdmf")
-    auxmesh = df.Mesh()
-    with df.XDMFFile(tetra_mesh_name.as_posix()) as infile:
-        infile.read(auxmesh)
-
-    tecido = df.MeshFunction("size_t", auxmesh, 3)
-    with df.XDMFFile(pl.Path(tetra_mesh_name).as_posix()) as f:
-        f.read(tecido, "name_to_read")
-
-    tecido.array()[:] = tecido.array()==2 
-    tecido.rename("tissue", "tissue")
-
-    import os 
-
-    os.system(f"rm mesh_{fname}.*")
-    os.system(f"rm triangle_mesh_{fname}.*")
-
-    return tecido
 
 
 def solve_laplace(mesh, boundary_markers, boundary_values, ldrb_markers):
@@ -145,7 +122,6 @@ def request_functions(meshname):
     print("Done.")
 
 
-#PROBLEMA GERACAO .VTU. NÃO COMPATÍVEL COM LEITURA DO HEXA MESH FROM VTK
 def convert_xdmf_to_vtu(meshname):
 
     print("Converting .xdmf to .vtu")
