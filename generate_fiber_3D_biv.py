@@ -31,7 +31,10 @@ def solve_laplace(mesh, boundary_markers, boundary_values, ldrb_markers):
     return u
 
 
-def request_functions(meshname):
+def request_functions(meshname, aux_alpha_endo_lv, aux_alpha_epi_lv, aux_beta_endo_lv, 
+                    aux_beta_epi_lv, aux_alpha_endo_sept, aux_alpha_epi_sept, 
+                    aux_beta_endo_sept, aux_beta_epi_sept, aux_alpha_endo_rv, 
+                    aux_alpha_epi_rv, aux_beta_endo_rv, aux_beta_epi_rv):
 
     #mesh reading converted by dolfin-convert
     mesh = df.Mesh(meshname + '.xml')
@@ -81,25 +84,23 @@ def request_functions(meshname):
         fiber_space=fiber_space,
         ffun=ffun,
         markers=ldrb_markers,
-        alpha_endo_lv=30,  # Fiber angle on the LV endocardium
-        alpha_epi_lv=-30,  # Fiber angle on the LV epicardium
-        beta_endo_lv=0,  # Sheet angle on the LV endocardium
-        beta_epi_lv=0,  # Sheet angle on the LV epicardium
-        alpha_endo_sept=60,  # Fiber angle on the Septum endocardium
-        alpha_epi_sept=-60,  # Fiber angle on the Septum epicardium
-        beta_endo_sept=0,  # Sheet angle on the Septum endocardium
-        beta_epi_sept=0,  # Sheet angle on the Septum epicardium
-        alpha_endo_rv=80,  # Fiber angle on the RV endocardium
-        alpha_epi_rv=-80,  # Fiber angle on the RV epicardium
-        beta_endo_rv=0,  # Sheet angle on the RV endocardium
-        beta_epi_rv=0,
+        alpha_endo_lv=aux_alpha_endo_lv,  # Fiber angle on the LV endocardium
+        alpha_epi_lv=aux_alpha_epi_lv,  # Fiber angle on the LV epicardium
+        beta_endo_lv=aux_beta_endo_lv,  # Sheet angle on the LV endocardium
+        beta_epi_lv=aux_beta_epi_lv,  # Sheet angle on the LV epicardium
+        alpha_endo_sept=aux_alpha_endo_sept,  # Fiber angle on the Septum endocardium
+        alpha_epi_sept=aux_alpha_epi_sept,  # Fiber angle on the Septum epicardium
+        beta_endo_sept=aux_beta_endo_sept,  # Sheet angle on the Septum endocardium
+        beta_epi_sept=aux_beta_epi_sept,  # Sheet angle on the Septum epicardium
+        alpha_endo_rv=aux_alpha_endo_rv,  # Fiber angle on the RV endocardium
+        alpha_epi_rv=aux_alpha_epi_rv,  # Fiber angle on the RV epicardium
+        beta_endo_rv=aux_beta_endo_rv,  # Sheet angle on the RV endocardium
+        beta_epi_rv=aux_beta_epi_rv,
     )
-
 
     fiber.rename("f_0","f_0")
     sheet.rename("s_0","s_0")
     sheet_normal.rename("n_0","n_0")
-
 
     print("Saving...")
 
@@ -121,7 +122,6 @@ def request_functions(meshname):
 
     print("Done.")
 
-
 def convert_xdmf_to_vtu(meshname):
 
     print("Converting .xdmf to .vtu")
@@ -130,7 +130,6 @@ def convert_xdmf_to_vtu(meshname):
 
     with meshio.xdmf.TimeSeriesReader(filename) as reader:
         points, cells = reader.read_points_cells()
-        #for k in range(reader.num_steps):
         t, point_data, cell_data = reader.read_data(0)
 
     mesh = meshio.Mesh(points, cells, point_data=point_data, cell_data=cell_data,)
