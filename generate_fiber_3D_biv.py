@@ -48,9 +48,9 @@ def request_functions(meshname, aux_alpha_endo_lv, aux_alpha_epi_lv, aux_beta_en
 
     ldrb_markers = {
         "base": 10,
-        "lv": 20,
+        "lv": 30,
         "epi": 40,
-        "rv": 30
+        "rv": 20
     }
 
     # Choose space for the fiber fields
