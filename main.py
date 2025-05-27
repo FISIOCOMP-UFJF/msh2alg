@@ -62,7 +62,7 @@ def main():
                 beta_endo_rv, beta_epi_rv)    
     print("================================================================================")
     print("Converting to alg...")
-    os.chdir('hexa-mesh-from-VTK/')
+    os.chdir('./hexa-mesh-from-VTK/')
     os.system(f'./bin/HexaMeshFromVTK -t -i "../{meshname}.vtu" --dx {args.dx} --dy {args.dy} --dz {args.dz} -r 1000 -c ../conf.ini -o "../{meshname}.alg"')
     os.chdir('../')
 
