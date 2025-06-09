@@ -8,7 +8,7 @@
 - h5py 
 - Scipy
 - CMake
-- VTK (libvtk7-dev)
+- VTK (libvtk9-dev)
 - [hexa-mesh-from-VTK](https://github.com/rsachetto/hexa-mesh-from-VTK.git): This repository is necessary for the generation of hexahedral meshes from VTK files. It will be cloned during the Configuration.
   
 
