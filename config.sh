@@ -10,7 +10,7 @@ if [ $(basename "$PWD") = "$dir" ]; then
         git clone https://github.com/FilipeNamorato/hexa-mesh-from-VTK_vtk9.git
         if [ $? -eq 0 ]; then
             echo "Repository cloned successfully."
-            cd hexa-mesh-from-VTK
+            cd hexa-mesh-from-VTK_vtk9
             cmake .
             if [ $? -eq 0 ]; then
                 echo "CMake configuration successful."
